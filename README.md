@@ -4,11 +4,8 @@
 paper: 
 
 ## Installation
-To run the code locally, follow the steps below to install required libraries.
-1. Install python:
-- python >= 3.8.5
-3. Other requirements:
-- pip install -e .
+This code was written based on `music21==7.2.0` and `pretty_midi==0.2.9`
+
 
 ## Quick Start: Compute Novelty and Influence scores and Draw Figures
 - Compute novelty and Influence scores of the piano dataset used in our paper.
