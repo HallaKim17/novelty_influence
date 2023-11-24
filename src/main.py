@@ -17,9 +17,11 @@ if __name__ == "__main__":
     if args.custom_dataset:
         metadata_path = '../data/meta/custom/metadata_custom.csv'
         data_path = '../data/preprocessed/custom/'
+        result_path = 'result/custom/'
     else:
         metadata_path = '../data/meta/novinf/metadata.csv'
         data_path = '../data/preprocessed/novinf/'
+        result_path = 'result/novinf'
 
     metadata = pd.read_csv(metadata_path, index_col=0)
 
@@ -34,20 +36,20 @@ if __name__ == "__main__":
     H_Novelty = compute_H_novelty(df=metadata, 
                                 codewords=Codewords,
                                 num_unique_cws=2**88) # number of combinations of all piano keys
-    with open('result/H-Novelty.pkl', 'wb') as f:
+    with open(os.path.join(result_path,'H-Novelty.pkl'), 'wb') as f:
         dill.dump(H_Novelty, f)
 
     # compute P-novelty
     P_Novelty = compute_P_novelty(df=metadata, 
                                 codewords=Codewords,
                                 num_unique_cws=2**88) # number of combinations of all piano keys
-    with open('result/P-Novelty.pkl', 'wb') as f:
+    with open(os.path.join(result_path,'P-Novelty.pkl'), 'wb') as f:
         dill.dump(P_Novelty, f)
 
 
     # compute influence
     Influence = compute_influence(df=metadata,
                                   codewords=Codewords) 
-    with open('result/Influence.pkl', 'wb') as f:
+    with open(os.path.join(result_path,'Influence.pkl'), 'wb') as f:
         dill.dump(Influence, f)
 

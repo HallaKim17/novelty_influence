@@ -4,22 +4,25 @@ from util import *
 import numpy as np
 import argparse
 import pandas as pd
+import os
 
 
 
-def H_novelty_plot(df):
-    with open('result/H-Novelty.pkl', 'rb') as f:
+def H_novelty_plot(df, result_path):
+    with open(os.path.join(result_path,'H-Novelty.pkl'), 'rb') as f:
         H_Novelty = dill.load(f)
     
     H_Novelty = list(H_Novelty.values())
     df['H_novelty'] = H_Novelty
+    df = df[df['H_novelty'].notna()]
+
     avg_novelty = df[['composer','H_novelty']].groupby('composer').mean()['H_novelty']
     std = []
     for composer in avg_novelty.index:
         c_nov = list(df[df['composer']==composer].H_novelty)
         std.append(jackknife_error(c_nov))
     avg_year = df[['composer','year']].groupby('composer').mean()['year']
-    
+
     fig = plt.figure(figsize=(20,8))
     plt.errorbar(avg_year, avg_novelty, yerr=std, linestyle='none', marker='s', markersize=8, capsize=4)
     plt.xticks(fontsize=15)
@@ -33,8 +36,8 @@ def H_novelty_plot(df):
     
 
 
-def P_Novelty_plot(df):
-    with open('result/P-Novelty.pkl', 'rb') as f:
+def P_Novelty_plot(df, result_path):
+    with open(os.path.join(result_path,'P-Novelty.pkl'), 'rb') as f:
         P_Novelty = dill.load(f)
     
     avg_novelty = []
@@ -55,8 +58,8 @@ def P_Novelty_plot(df):
 
 
 
-def Influence_plot(df, composers_list):
-    with open('result/Influence.pkl', 'rb') as f:
+def Influence_plot(df, composers_list, result_path):
+    with open(os.path.join(result_path,'Influence.pkl'), 'rb') as f:
         Influence = dill.load(f)
 
     fig, axes = plt.subplots(1,4,figsize=(20,8))
@@ -66,7 +69,7 @@ def Influence_plot(df, composers_list):
     colors = [get_random_color() for i in range(len(composers_list))]
     #colors = ['rebeccapurple','royalblue','palevioletred','lightskyblue','lightgreen','mediumaquamarine','yellow',
     #         'darkorange','crimson','maroon']
-    
+
     for i,composer in enumerate(composers_list):
         influenced_songs = list(Influence[composer].keys())
         influenced_songs_yrs = [metadata['year'][s] for s in influenced_songs]
@@ -113,7 +116,6 @@ if __name__ == "__main__":
     parser.add_argument('--plot', type=str, required=True, help='H-novelty/P-novelty/Influence')
     parser.add_argument('--composers', type=str, help='A list of composers to plot Influence scores', default='Bach, D.Scarlatti, Handel, Haydn, Clementi, Mozart, Beethoven, Schubert, Chopin, Liszt')
     parser.add_argument('--custom_dataset', type=bool, default=False)
-
     
     args = parser.parse_args()
     composers = [c.strip() for c in args.composers.split(',')] 
@@ -121,16 +123,19 @@ if __name__ == "__main__":
     if args.custom_dataset:
         metadata_path = '../data/meta/custom/metadata_custom.csv'
         data_path = '../data/preprocessed/custom/'
+        result_path = 'result/custom/'
     else:
         metadata_path = '../data/meta/novinf/metadata.csv'
         data_path = '../data/preprocessed/novinf/'
+        result_path = 'result/novinf'
 
     metadata = pd.read_csv(metadata_path, index_col=0)
     
     if args.plot == 'H-novelty':
-        H_novelty_plot(df=metadata)
+        H_novelty_plot(df=metadata, result_path=result_path)
     elif args.plot == 'P-novelty':
-        P_Novelty_plot(df=metadata)
+        P_Novelty_plot(df=metadata, result_path=result_path)
     elif args.plot == 'Influence':
         Influence_plot(df=metadata, 
-                        composers_list=composers)
+                        composers_list=composers,
+                        result_path=result_path)
