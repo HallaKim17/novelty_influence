@@ -1,0 +1,13 @@
+'dill',
+'numpy',
+'pandas',
+'scikit-learn',
+'matplotlib',
+'tqdm',
+'music21==7.3.3'
+'pretty-midi'
+'argparse'
+'os'
+'collections'
+'copy'
+'math'
