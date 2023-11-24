@@ -5,7 +5,7 @@ This is an implementation of the paper:
 > Park, D., Nam, J. & Park, J. Novelty and influence of creative works, and quantifying patterns of advances based on probabilistic references networks. EPJ Data Sci. 9, 2 (2020). https://doi.org/10.1140/epjds/s13688-019-0214-8
 
 ## Installation
-This code was written based on `music21==7.2.0` and `pretty_midi==0.2.9`
+This code was written based on `music21==7.3.3` and `pretty_midi==0.2.9`
 
 
 ## Quick Start: Compute Novelty and Influence scores and Draw Figures
