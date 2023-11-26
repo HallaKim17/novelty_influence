@@ -24,6 +24,7 @@ if __name__ == "__main__":
         result_path = 'result/novinf'
 
     metadata = pd.read_csv(metadata_path, index_col=0)
+    metadata = metadata.sort_values(by=['year'], ascending=True)
 
     Codewords = {}
     for idx in tqdm(metadata.index):

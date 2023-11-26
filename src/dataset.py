@@ -55,6 +55,8 @@ if __name__ == "__main__":
 
     custom_metadata_path = '../data/meta/custom/metadata_custom.csv'
     metadata = pd.read_csv(custom_metadata_path, index_col=0)
+    metadata = metadata.sort_values(by=['year'], ascending=True)
+    
     Codewords, failed = get_codewords(metadata)
     print(f"Failed to read {len(failed)} midi files: ", failed)
     

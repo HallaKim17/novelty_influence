@@ -1,5 +1,4 @@
 from collections import defaultdict
-from tqdm import tqdm
 import math
 
 def compute_influence(df, codewords):
